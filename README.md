@@ -1,1 +1,1 @@
-# Interacting-Things
+This is my Interacting Things project. 
