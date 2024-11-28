@@ -1,62 +1,42 @@
-let circleX, circleY, circleDX, circleDY, circleRadius;
-let rectX, rectY, rectDX, rectDY, rectWidth, rectHeight;
+class Shape {
+  constructor(x, y, size, color) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.color = color;
+  }
+
+  display() {
+    fill(this.color);
+    ellipse(this.x, this.y, this.size);
+  }
+
+  update(dx, dy) {
+    this.x += dx;
+    this.y += dy;
+  }
+}
+
+function isOverlapping(shape1, shape2) {
+  return dist(shape1.x, shape1.y, shape2.x, shape2.y) < (shape1.size + shape2.size) / 2;
+}
+
+let shape1, shape2;
 
 function setup() {
   createCanvas(400, 400);
-  reset();
-  noStroke();
+  shape1 = new Shape(100, 200, 50, 'red');
+  shape2 = new Shape(300, 200, 50, 'blue');
 }
 
 function draw() {
   background(220);
-
-  fill(255, 0, 0);
-  circle(circleX, circleY, circleRadius);
-
-  fill(0, 0, 255);
-  rect(rectX, rectY, rectWidth, rectHeight);
-
-  circleX += circleDX;
-  circleY += circleDY;
-  rectX += rectDX;
-  rectY += rectDY;
-
-  if (circleX - circleRadius < 0 || circleX + circleRadius > width) {
-    circleDX *= -1;
-  }
-  if (circleY - circleRadius < 0 || circleY + circleRadius > height) {
-    circleDY *= -1;
-  }
-  if (rectX < 0 || rectX + rectWidth > width) {
-    rectDX *= -1;
-  }
-  if (rectY < 0 || rectY + rectHeight > height) {
-    rectDY *= -1;
-  }
-
-  if (dist(circleX, circleY, rectX + rectWidth / 2, rectY + rectHeight / 2) < (circleRadius + min(rectWidth, rectHeight) / 2)) {
-    circleDX *= -1;
-    circleDY *= -1;
-    rectDX *= -1;
-    rectDY *= -1;
+  shape1.display();
+  shape2.display();
+  shape1.update(1, 0);
+  if (isOverlapping(shape1, shape2)) {
+    shape1.color = 'green';
+    shape2.color = 'green';
   }
 }
 
-function keyPressed() {
-  reset();
-}
-
-function reset() {
-  circleX = random(width);
-  circleY = random(height);
-  circleDX = random(-2, 2);
-  circleDY = random(-2, 2);
-  circleRadius = random(20, 40);
-
-  rectX = random(width);
-  rectY = random(height);
-  rectDX = random(-2, 2);
-  rectDY = random(-2, 2);
-  rectWidth = random(40, 60);
-  rectHeight = random(20, 40);
-}
